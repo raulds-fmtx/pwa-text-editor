@@ -1,12 +1,12 @@
-const createHeader = () => {
-  const header = document.createElement("header");
-  header.classList.add("header");
+const header = `
+/*
+       _____  ____________
+      / /   |/_  __/ ____/
+ __  / / /| | / / / __/   
+/ /_/ / ___ |/ / / /___   
+ ____/_/  |_/_/ /_____/   
+just another text editor
+*/                          
+`;
 
-  const title = document.createElement("h1");
-  title.textContent = "PWA Text Editor";
-  header.appendChild(title);
-
-  return header;
-};
-
-export default createHeader;
+export { header };

@@ -1,21 +1,12 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware for parsing JSON and urlencoded form data
-app.use(express.json());
+app.use(express.static("../client/dist"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '../client/dist')));
+require("./routes/htmlRoutes")(app);
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
-
-// Routes
-require('./models/htmlRoutes')(app);
-
-// Start the API server
-app.listen(PORT, () => console.log(`🌍 Now listening on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Now listening on port: ${PORT}`));

@@ -1,25 +1,33 @@
-import createHeader from "./header";
-import { initDB, saveContent, getContent } from "./database";
-import { initEditor } from "./editor";
-import { initSW } from "./registerSW";
-import { initInstallButton } from "./install";
+import { Workbox } from "workbox-window";
+import Editor from "./editor";
+import "./database";
+import "../css/style.css";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // await initDB();
-  // initEditor();
-  // initSW();
-  // initInstallButton();
-  
-  const app = document.getElementById("app");
-  app.appendChild(createHeader());
+const main = document.querySelector("#main");
+main.innerHTML = "";
 
-  // Further initialization code can go here
-  const editor = document.createElement("textarea");
-  editor.id = "editor";
-  app.appendChild(editor);
+const loadSpinner = () => {
+  const spinner = document.createElement("div");
+  spinner.classList.add("spinner");
+  spinner.innerHTML = `
+  <div class="loading-container">
+  <div class="loading-spinner" />
+  </div>
+  `;
+  main.appendChild(spinner);
+};
 
-  // Add an install button if desired
-  const installButton = document.createElement("button");
-  installButton.textContent = "Install";
-  app.appendChild(installButton);
-});
+const editor = new Editor();
+
+if (typeof editor === "undefined") {
+  loadSpinner();
+}
+
+// Check if service workers are supported
+if ("serviceWorker" in navigator) {
+  // register workbox service worker
+  const workboxSW = new Workbox("/src-sw.js");
+  workboxSW.register();
+} else {
+  console.error("Service workers are not supported in this browser.");
+}
